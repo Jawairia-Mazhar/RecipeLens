@@ -13,7 +13,7 @@ const SearchBar = () => {
         value= {text} onChange={handleChange}/>
         <button>Search</button>
 
-        <p>Current input: {text}</p>
+        <p>Current input: {text}</p> 
 
     </div>
   )
