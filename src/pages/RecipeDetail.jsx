@@ -1,7 +1,7 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
 
-const RecipeDetail = () => {
+const RecipeDetail = ({ addToFav}) => {
     const { id } = useParams() //access dynamic parameters from the current URL
     const [recipe, setRecipe] = React.useState(null); // returns a single recipe object, not an array, so we initialize it as null instead of an empty array
     const [loading, setLoading] = React.useState(false);
@@ -23,19 +23,18 @@ const RecipeDetail = () => {
 
   return (
     <>
-    {loading ? <p>Loading...</p> :  
+        {loading ? <p>Loading...</p> :  
         recipe && (
             <div>
                 <h1>{recipe.title}</h1>
                 <img src={recipe.image} alt={recipe.title} />
                 <p>{recipe.instructions}</p>
+                <button onClick={() => addToFav(recipe)}>Add to Favorites</button>
             </div>
         )}
         {error && <p>{error}</p>} {/*  If error is not null, show it. */}
+
     </>
-
-
-
   )
 }
 
