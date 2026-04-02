@@ -1,7 +1,8 @@
 import React from 'react'
-import Home from './pages/Home'
 import Navbar from './components/Navbar'
+import Home from './pages/Home'
 import RecipeDetail from './pages/RecipeDetail'
+import Favorites from './pages/Favorites'
 import { Routes, Route } from 'react-router-dom'
 
 
@@ -34,6 +35,8 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/recipe/:id" element={ <RecipeDetail addToFav={addToFav} /> } />
+        <Route path="/favorites" element={<Favorites favorites={favorites} />} />
+
       </Routes>
     </>
   )
