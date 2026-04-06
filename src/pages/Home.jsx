@@ -1,6 +1,7 @@
 import React from 'react'
 import SearchBar from '../components/SearchBar'
 import RecipeCard from '../components/RecipeCard'
+import backgroundImage from '../assets/bg-img.png'
 
 const Home = () => {
   const [searchedText, setSearchedText] = React.useState(''); // state to store fetched recipes, stores a string
@@ -29,8 +30,10 @@ const Home = () => {
 
   return (
     <>
-      <p>Home</p>
-      <SearchBar onSearch={onSearch} />
+      <main className='bg-red-100 w-full h-160 flex flex-col items-center gap-4'>
+        <img src={backgroundImage} alt="Background" />
+        <SearchBar onSearch={onSearch} className="w-full max-w-md justify-center p-10"/>
+      </main>
     {loading ? <p>Loading...</p> :  
       recipes.map(recipe => (
         <RecipeCard key={recipe.id} recipe={recipe} /> //maps over recipes and renders a RecipeCard for each recipe, passing the recipe data as a prop
