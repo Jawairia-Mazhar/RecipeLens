@@ -3,7 +3,7 @@ import SearchBar from '../components/SearchBar'
 import RecipeCard from '../components/RecipeCard'
 import backgroundImage from '../assets/bg-img.png'
 
-const Home = () => {
+const Home = ({addToFav}) => {
   const [searchedText, setSearchedText] = React.useState(''); // state to store fetched recipes, stores a string
   const [recipes, setRecipes] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
@@ -31,13 +31,15 @@ const Home = () => {
   return (
     <>
       <main className='bg-red-100 w-full h-160 flex flex-col items-center gap-4'>
-        <img src={backgroundImage} alt="Background" />
+        <img src={backgroundImage} alt="Background" className='h-[70%] w-full object-cover'/>
         <SearchBar onSearch={onSearch} className="w-full max-w-md justify-center p-10"/>
       </main>
     {loading ? <p>Loading...</p> :  
-      recipes.map(recipe => (
-        <RecipeCard key={recipe.id} recipe={recipe} /> //maps over recipes and renders a RecipeCard for each recipe, passing the recipe data as a prop
-      ))
+      <div className='flex flex-wrap gap-4'>
+        {recipes.map(recipe => (
+          <RecipeCard key={recipe.id} recipe={recipe} addToFav={addToFav} removeFromFav={removeFromFav}/> //maps over recipes and renders a RecipeCard for each recipe, passing the recipe data as a prop
+        ))}
+      </div>
     }
       {error && <p>{error}</p>} {/*  If error is not null, show it. */}
     </>

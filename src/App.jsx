@@ -2,22 +2,25 @@ import React from 'react'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import RecipeDetail from './pages/RecipeDetail'
+import RecipeCard from './components/RecipeCard'
 import Favorites from './pages/Favorites'
 import { Routes, Route } from 'react-router-dom'
-
+import FilledFav from './assets/filled_heart.png'
+import EmptyFav from './assets/favorite.png'
 
 const App = () => {
   const [favorites, setFavorites] = React.useState([])
+  const isFavorite = favorites.some((fav) => fav.id === recipe.id);
+
 
   React.useEffect(() => {
     localStorage.setItem('favorites', JSON.stringify(favorites)) // Whenever the favorites state changes, we update the local storage with the new favorites list. We convert the favorites array to a JSON string before storing it, because local storage can only store strings.
-    
   }, [favorites])
 
   React.useEffect(() => {
     const stored = localStorage.getItem('favorites') // The if (stored) guard is important — if nothing is saved yet, getItem returns null and JSON.parse(null) would crash.
     if (stored) {
-      setFavorites(JSON.parse(stored))
+      setFavorites(JSON.parse(stored)) // When the App component mounts, we check if there are any favorites saved in local storage. If there are, we parse the JSON string back into an array and set it as the initial state for favorites. This way, the user's favorite recipes persist across page reloads.
     }
   }, []) 
 
@@ -33,8 +36,9 @@ const App = () => {
     <>
       <Navbar />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/recipe/:id" element={ <RecipeDetail addToFav={addToFav} /> } />
+        <Route path="/" element={<Home  addToFav={addToFav} removeFromFav={removeFromFav}/>} />
+        <Route path="/recipe/:id" element={ <RecipeDetail addToFav={addToFav} removeFromFav={removeFromFav} /> } />
+        <Route path="/recipe/:id" element={ <RecipeCard addToFav={addToFav} removeFromFav={removeFromFav} /> } /> {/* This route is added to ensure that when a user clicks on a recipe card, they are navigated to the recipe detail page where they can see more information about the recipe and have the option to add it to their favorites. */}
         <Route path="/favorites" element={<Favorites favorites={favorites} />} />
 
       </Routes>
