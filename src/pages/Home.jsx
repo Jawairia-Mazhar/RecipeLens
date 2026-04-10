@@ -30,9 +30,12 @@ const Home = ({favorites, addToFav, removeFromFav}) => {
 
   return (
     <>
-      <main className='bg-red-100 w-full h-160 flex flex-col items-center gap-4'>
-        <img src={backgroundImage} alt="Background" className='h-[70%] w-full object-cover'/>
-        <SearchBar onSearch={onSearch} className="w-full max-w-md justify-center p-10"/>
+      <main className='w-full min-h-screen relative flex flex-col items-center gap-4 pt-16 bg-transparent'>
+        <img src={backgroundImage} alt="Background"   
+          className='w-full h-full object-cover absolute inset-0 -z-10'
+          style={{ filter: 'blur(0px)' }}
+        />
+        <SearchBar onSearch={onSearch} className="w-full p-10"/>
       </main>
     {loading ? <p>Loading...</p> :  
       <div className='flex flex-wrap gap-4'>
