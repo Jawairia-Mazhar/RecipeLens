@@ -1,8 +1,9 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import FavoriteIcon from '../assets/favorite.png'
+import EmptyFav from '../assets/favorite.png'
+import FilledFav from '../assets/filled_heart.png'
 
-const RecipeDetail = ({ addToFav}) => {
+const RecipeDetail = ({favorites, addToFav, removeFromFav}) => {
     const { id } = useParams() //access dynamic parameters from the current URL
     const [recipe, setRecipe] = React.useState(null); // returns a single recipe object, not an array, so we initialize it as null instead of an empty array
     const [loading, setLoading] = React.useState(false);
@@ -22,6 +23,7 @@ const RecipeDetail = ({ addToFav}) => {
         })
     }, [id])
 
+const isFavorite = recipe ? favorites.some((fav) => fav.id === recipe.id) : false // Checking if the recipe has data, If yes then check favorites if the recipe is in favorites, otherwise just return false.      
   return (
     <>
         {loading ? <p>Loading...</p> :  
@@ -32,8 +34,11 @@ const RecipeDetail = ({ addToFav}) => {
                     <h1 className="text-2xl font-bold"> {recipe.title}</h1>
                     <p className="text-left">{recipe.instructions}</p>
                 </div>
-                <button onClick={() => addToFav(recipe)}>
-                    <img src={FavoriteIcon} alt="Add to Favorites" className='w-6 h-6'/>
+                <button 
+                onClick={() => isFavorite ? removeFromFav(recipe.id) : addToFav(recipe)}>
+                    <img 
+                    src={isFavorite ? FilledFav : EmptyFav} 
+                    alt={isFavorite ? "Remove from Favorites" : "Add to Favorites"} className='w-6 h-6'/>
                 </button>
             </div>
         )}

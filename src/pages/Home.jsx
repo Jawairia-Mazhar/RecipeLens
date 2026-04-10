@@ -3,7 +3,7 @@ import SearchBar from '../components/SearchBar'
 import RecipeCard from '../components/RecipeCard'
 import backgroundImage from '../assets/bg-img.png'
 
-const Home = ({addToFav}) => {
+const Home = ({favorites, addToFav, removeFromFav}) => {
   const [searchedText, setSearchedText] = React.useState(''); // state to store fetched recipes, stores a string
   const [recipes, setRecipes] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
@@ -12,7 +12,7 @@ const Home = ({addToFav}) => {
   React.useEffect(() => { // fetching the API
     if (!searchedText) return;
     setLoading(true); //it sets loading to true after the user has entered a search term, indicating that the app is in the process of fetching data.
-      fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=${searchedText}&number=5&apiKey=ef8cd867a22541cf8424f6b4c4cd361b`)
+      fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=${searchedText}&apiKey=ef8cd867a22541cf8424f6b4c4cd361b`)
       .then(res => res.json())
       .then(data => {
         setRecipes(data);
@@ -37,7 +37,7 @@ const Home = ({addToFav}) => {
     {loading ? <p>Loading...</p> :  
       <div className='flex flex-wrap gap-4'>
         {recipes.map(recipe => (
-          <RecipeCard key={recipe.id} recipe={recipe} addToFav={addToFav} removeFromFav={removeFromFav}/> //maps over recipes and renders a RecipeCard for each recipe, passing the recipe data as a prop
+          <RecipeCard key={recipe.id} recipe={recipe} addToFav={addToFav} removeFromFav={removeFromFav} favorites={favorites}/> //maps over recipes and renders a RecipeCard for each recipe, passing the recipe data as a prop
         ))}
       </div>
     }

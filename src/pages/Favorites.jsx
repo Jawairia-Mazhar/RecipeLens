@@ -1,7 +1,7 @@
 import React from 'react'
 import RecipeCard from '../components/RecipeCard'
 
-const Favorites = ({ favorites }) => {
+const Favorites = ({ favorites, addToFav, removeFromFav }) => {
 
   return (
     <>
@@ -11,7 +11,12 @@ const Favorites = ({ favorites }) => {
             :
             <div className='flex flex-wrap gap-4 justify-center p-4'>
                 {favorites.map(recipe => (
-                        <RecipeCard key={recipe.id} recipe={recipe} />
+                        <RecipeCard 
+                            key={recipe.id} 
+                            recipe={recipe}
+                            favorites={favorites}
+                            addToFav={addToFav}
+                            removeFromFav={removeFromFav}/>
                 ))}
             </div>
         }     

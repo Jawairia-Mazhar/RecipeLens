@@ -5,15 +5,12 @@ import RecipeDetail from './pages/RecipeDetail'
 import RecipeCard from './components/RecipeCard'
 import Favorites from './pages/Favorites'
 import { Routes, Route } from 'react-router-dom'
-import FilledFav from './assets/filled_heart.png'
-import EmptyFav from './assets/favorite.png'
 
 const App = () => {
   const [favorites, setFavorites] = React.useState([])
-  const isFavorite = favorites.some((fav) => fav.id === recipe.id);
-
 
   React.useEffect(() => {
+    if (favorites.length === 0) return; // We only want to update local storage when there are changes to the favorites list, so we check if the length of favorites is 0. If it is, we return early and do not update local storage. This prevents unnecessary updates to local storage when the favorites list is empty.
     localStorage.setItem('favorites', JSON.stringify(favorites)) // Whenever the favorites state changes, we update the local storage with the new favorites list. We convert the favorites array to a JSON string before storing it, because local storage can only store strings.
   }, [favorites])
 
@@ -36,10 +33,10 @@ const App = () => {
     <>
       <Navbar />
       <Routes>
-        <Route path="/" element={<Home  addToFav={addToFav} removeFromFav={removeFromFav}/>} />
-        <Route path="/recipe/:id" element={ <RecipeDetail addToFav={addToFav} removeFromFav={removeFromFav} /> } />
-        <Route path="/recipe/:id" element={ <RecipeCard addToFav={addToFav} removeFromFav={removeFromFav} /> } /> {/* This route is added to ensure that when a user clicks on a recipe card, they are navigated to the recipe detail page where they can see more information about the recipe and have the option to add it to their favorites. */}
-        <Route path="/favorites" element={<Favorites favorites={favorites} />} />
+        <Route path="/" element={<Home  addToFav={addToFav} removeFromFav={removeFromFav} favorites={favorites}/>} />
+        <Route path="/recipe/:id" element={ <RecipeDetail favorites={favorites} addToFav={addToFav} removeFromFav={removeFromFav} /> } />
+        <Route path="/recipe/:id" element={ <RecipeCard favorites={favorites} addToFav={addToFav} removeFromFav={removeFromFav}/> } /> {/* This route is added to ensure that when a user clicks on a recipe card, they are navigated to the recipe detail page where they can see more information about the recipe and have the option to add it to their favorites. */}
+        <Route path="/favorites" element={<Favorites favorites={favorites} addToFav={addToFav} removeFromFav={removeFromFav}/>} />
 
       </Routes>
     </>
