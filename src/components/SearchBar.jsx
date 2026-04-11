@@ -17,7 +17,9 @@ const SearchBar = ({onSearch}) => {
                 onSearch(text)
                 }
         }} />
-        <button onClick={() => onSearch(text)} className="cursor-pointer">
+        <button onClick={() => {
+            onSearch(text);
+        }} className="cursor-pointer">
             <img src={SearchIcon} alt="Search" className="w-6 h-6" />
         </button>
     </div>

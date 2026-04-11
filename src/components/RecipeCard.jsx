@@ -8,7 +8,7 @@ const RecipeCard = ({ recipe, favorites, addToFav, removeFromFav }) => {
   const isFavorite = recipe ? favorites.some((fav) => fav.id === recipe.id) : false;
   return (
     <div onClick={() => navigate(`/recipe/${recipe.id}`)} className='cursor-pointer overflow-hidden flex flex-col gap-2 items-center border border-gray-300 rounded-md p-2 w-78'> 
-      <img src={recipe.image} alt={recipe.title} />
+      <img src={recipe.image} alt={recipe.title} className="rounded-full"/>
       
       <div className='flex justify-between items-center w-full'>
         <h2>{recipe.title}</h2>

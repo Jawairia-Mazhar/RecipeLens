@@ -28,6 +28,14 @@ const Home = ({favorites, addToFav, removeFromFav}) => {
       setSearchedText(text); // update state with search text
     }
 
+    const recipesRef = React.useRef(null); // create a ref to the recipes container
+ 
+    React.useEffect(() => {
+      if (recipes.length > 0){
+        recipesRef.current.scrollIntoView({ behavior: 'smooth' }); // Scroll to the recipes container smoothly when new recipes are loaded
+      }
+    })
+
   return (
     <>
       <main className='w-full min-h-screen relative flex flex-col items-center gap-4 pt-16 bg-transparent'>
@@ -51,7 +59,7 @@ const Home = ({favorites, addToFav, removeFromFav}) => {
         <SearchBar onSearch={onSearch} className="w-full p-10"/>
       </main>
     {loading ? <p>Loading...</p> :  
-      <div className='flex flex-wrap gap-4'>
+      <div className='flex flex-wrap gap-4' id = "recipesContainer" ref={recipesRef}> {/* Assign the ref to the container */}
         {recipes.map(recipe => (
           <RecipeCard key={recipe.id} recipe={recipe} addToFav={addToFav} removeFromFav={removeFromFav} favorites={favorites}/> //maps over recipes and renders a RecipeCard for each recipe, passing the recipe data as a prop
         ))}
