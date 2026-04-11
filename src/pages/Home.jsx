@@ -14,7 +14,7 @@ const Home = ({favorites, addToFav, removeFromFav}) => {
     setLoading(true); //it sets loading to true after the user has entered a search term, indicating that the app is in the process of fetching data.
       fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=${searchedText}&apiKey=ef8cd867a22541cf8424f6b4c4cd361b`)
       .then(res => res.json())
-      .then(data => {
+      .then(data => { 
         setRecipes(data);
         setLoading(false); // ✅ runs only after data arrives
       })
@@ -35,6 +35,19 @@ const Home = ({favorites, addToFav, removeFromFav}) => {
           className='w-full h-full object-cover absolute inset-0 -z-10'
           style={{ filter: 'blur(0px)' }}
         />
+{/* curved text using svg */}
+        <svg viewBox="0 0 900 180" className="w-full max-w-6xl h-60">
+          <defs>
+            <path id="curve" d="M 20 120 Q 450 20 880 120" fill="transparent" />
+          </defs>
+
+          <text fontSize="32" className="fill-white font-bold">
+            <textPath href="#curve" startOffset="50%" textAnchor="middle" lengthAdjust="spacingAndGlyphs">
+              Find Recipes from What’s Already in Your Kitchen.
+            </textPath>
+          </text>
+        </svg>
+
         <SearchBar onSearch={onSearch} className="w-full p-10"/>
       </main>
     {loading ? <p>Loading...</p> :  

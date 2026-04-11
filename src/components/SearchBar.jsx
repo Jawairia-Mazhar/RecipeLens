@@ -9,7 +9,7 @@ const SearchBar = ({onSearch}) => {
     }
 
   return (
-    <div className='searchContainer placeholder:text-gray-400 focus-within:placeholder:text-gray-200 place-items-center flex gap-2 border border-gray-300 rounded-md p-2 w-full max-w-md'>
+    <div className='searchContainer placeholder:text-gray-400 focus-within:placeholder:text-gray-200 place-items-center gap-2 border border-gray-300 rounded-md p-2 w-full max-w-md flex items-center'>
         <input type="text" placeholder="Search recipes by ingredients..." 
         value= {text} onChange={handleChange} className="searchInput outline-none p-1 w-full"/>
         <button onClick={() => onSearch(text)} className="cursor-pointer">
