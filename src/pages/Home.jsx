@@ -32,7 +32,7 @@ const Home = ({favorites, addToFav, removeFromFav}) => {
  
     React.useEffect(() => {
       if (recipes.length > 0){
-        recipesRef.current.scrollIntoView({ behavior: 'smooth' }); // Scroll to the recipes container smoothly when new recipes are loaded
+        recipesRef.current?.scrollIntoView({ behavior: 'smooth' }); // Scroll to the recipes container smoothly when new recipes are loaded
       }
     })
 
