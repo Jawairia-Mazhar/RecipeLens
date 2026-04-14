@@ -25,7 +25,7 @@ const RecipeCard = ({ recipe, favorites, addToFav, removeFromFav }) => {
             <img src={isFavorite ? FilledFav : EmptyFav} alt={isFavorite ? "Remove from Favorites" : "Add to Favorites"} className='w-8 h-8'/>
           </button>
         </div>
-      <h2>{recipe.title}</h2>
+      <h2 className='text-center pt-2'>{recipe.title}</h2>
       </div>
     </div>
   )

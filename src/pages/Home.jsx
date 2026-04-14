@@ -14,11 +14,19 @@ const Home = ({favorites, addToFav, removeFromFav}) => {
     setLoading(true); //it sets loading to true after the user has entered a search term, indicating that the app is in the process of fetching data.
       fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=${searchedText}&apiKey=ef8cd867a22541cf8424f6b4c4cd361b`)
       .then(res => res.json())
-      .then(data => { 
-        setRecipes(data);
-        setLoading(false); // ✅ runs only after data arrives
+      .then(data => {
+        if (Array.isArray(data)) {
+          setRecipes(data);
+          localStorage.setItem('lastResults', JSON.stringify(data));
+          setError(null);
+        } else {
+          setRecipes([]);
+          setError(data.message || 'No recipes found.');
+        }
+        setLoading(false); // ✅ runs only after data arrives 
       })
       .catch(err => { //sits at the end of the chain and catches any of those failures — like a safety net. If anything goes wrong above it, .catch() runs instead.
+        setRecipes([]);
         setError('Something went wrong. Please try again.');
         setLoading(false);        
       });
@@ -59,7 +67,7 @@ const Home = ({favorites, addToFav, removeFromFav}) => {
         <SearchBar onSearch={onSearch} className="w-full p-10"/>
       </main>
     {loading ? <p>Loading...</p> :  
-      <div className='flex flex-wrap gap-4' id = "recipesContainer" ref={recipesRef}> {/* Assign the ref to the container */}
+      <div className='flex flex-wrap gap-4 w-full justify-center pt-8 pb-8' id = "recipesContainer" ref={recipesRef}> {/* Assign the ref to the container */}
         {recipes.map(recipe => (
           <RecipeCard key={recipe.id} recipe={recipe} addToFav={addToFav} removeFromFav={removeFromFav} favorites={favorites}/> //maps over recipes and renders a RecipeCard for each recipe, passing the recipe data as a prop
         ))}
