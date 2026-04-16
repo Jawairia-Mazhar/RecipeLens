@@ -13,8 +13,10 @@ const RecipeCard = ({ recipe, favorites, addToFav, removeFromFav }) => {
       className='cursor-pointer overflow-hidden flex flex-col gap-2 items-center border border-gray-300 rounded-md p-2 w-70'>
 
       <div className='relative group'>
-        <img src={recipe.image} alt={recipe.title}
-            className="w-58 h-58 rounded-full object-cover border-4 border-white shadow-lg"/>
+        <div className='w-58 h-58 rounded-full'>
+          <img src={recipe.image} alt={recipe.title}
+              className="w-58 h-58 rounded-full object-cover border-4 border-white shadow-lg"/>
+        </div>
       
         <div className='flex justify-center items-center w-58 h-58 rounded-full absolute inset-0 bg-transparent backdrop-blur-xs bg-opacity-50 opacity-0 group-hover:opacity-90 transition-opacity duration-200'>
           <button 

@@ -2,6 +2,7 @@ import { BrowserRouter } from 'react-router-dom' // wraps your whole app, enable
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
+import '@fontsource/pacifico'
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
