@@ -4,36 +4,51 @@ import RecipeCard from '../components/RecipeCard'
 import backgroundImage from '../assets/bg-img.png'
 
 const Home = ({favorites, addToFav, removeFromFav}) => {
-  const [searchedText, setSearchedText] = React.useState(''); // state to store fetched recipes, stores a string
+  const [searchedText, setSearchedText] = React.useState('');
   const [recipes, setRecipes] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
-  
-  React.useEffect(() => { // fetching the API
-    if (!searchedText) return;
-    setLoading(true); //it sets loading to true after the user has entered a search term, indicating that the app is in the process of fetching data.
-      fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=${searchedText}&apiKey=ef8cd867a22541cf8424f6b4c4cd361b`)
+  const [shouldFetch, setShouldFetch] = React.useState(false);
+
+  React.useEffect(() => {
+    const storedText = localStorage.getItem('lastSearchText');
+    const storedRecipes = localStorage.getItem('lastResults');
+
+    if (storedText && storedRecipes) {
+      setSearchedText(storedText);
+      setRecipes(JSON.parse(storedRecipes));
+    }
+  }, []);
+
+  React.useEffect(() => {
+    if (!searchedText || !shouldFetch) return;
+    setLoading(true);
+    fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=${searchedText}&apiKey=ef8cd867a22541cf8424f6b4c4cd361b`)
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) {
           setRecipes(data);
           localStorage.setItem('lastResults', JSON.stringify(data));
+          localStorage.setItem('lastSearchText', searchedText);
           setError(null);
         } else {
           setRecipes([]);
           setError(data.message || 'No recipes found.');
         }
-        setLoading(false); // ✅ runs only after data arrives 
+        setLoading(false);
+        setShouldFetch(false);
       })
-      .catch(err => { //sits at the end of the chain and catches any of those failures — like a safety net. If anything goes wrong above it, .catch() runs instead.
+      .catch(err => {
         setRecipes([]);
         setError('Something went wrong. Please try again.');
         setLoading(false);        
+        setShouldFetch(false);
       });
-    }, [searchedText])
+    }, [searchedText, shouldFetch])
 
     const onSearch = (text) => {
-      setSearchedText(text); // update state with search text
+      setSearchedText(text);
+      setShouldFetch(true);
     }
 
     const recipesRef = React.useRef(null); // create a ref to the recipes container
@@ -43,6 +58,8 @@ const Home = ({favorites, addToFav, removeFromFav}) => {
         recipesRef.current?.scrollIntoView({ behavior: 'smooth' }); // Scroll to the recipes container smoothly when new recipes are loaded
       }
     })
+    
+    const suggestions = ['Chickpeas', 'Pasta', 'Oats', 'Lentils', 'Eggs', 'Cheese']
 
   return (
     <>
@@ -63,11 +80,22 @@ const Home = ({favorites, addToFav, removeFromFav}) => {
             </textPath>
           </text>
         </svg>
+{/* suggested search buttons */}
+        <div className='flex flex-wrap gap-2 justify-center'>
+          {suggestions.map(item => (
+            <button 
+              key={item}
+              onClick={() => onSearch(item)}
+              className='bg-white bg-opacity-80 text-gray-800 px-4 py-1 rounded-full text-sm hover:bg-opacity-100 transition'>
+              {item}
+            </button>
+          ))}
+        </div>
 
-        <SearchBar onSearch={onSearch} className="w-full p-10"/>
+        <SearchBar onSearch={onSearch} initialValue={searchedText} className="w-full"/>
       </main>
     {loading ? <p>Loading...</p> :  
-      <div className='flex flex-wrap gap-4 w-full justify-center pt-8 pb-8' id = "recipesContainer" ref={recipesRef}> {/* Assign the ref to the container */}
+      <div className='flex flex-wrap gap-4 w-full justify-center py-8' id = "recipesContainer" ref={recipesRef}> {/* Assign the ref to the container */}
         {recipes.map(recipe => (
           <RecipeCard key={recipe.id} recipe={recipe} addToFav={addToFav} removeFromFav={removeFromFav} favorites={favorites}/> //maps over recipes and renders a RecipeCard for each recipe, passing the recipe data as a prop
         ))}
