@@ -74,7 +74,7 @@ const Home = ({favorites, addToFav, removeFromFav}) => {
             <path id="curve" d="M 20 120 Q 450 20 880 120" fill="transparent" />
           </defs>
 
-          <text fontSize="32" className="fill-white font-bold">
+          <text fontSize="32" className="fill-white font-bold text-shadow-sm">
             <textPath href="#curve" startOffset="50%" textAnchor="middle" lengthAdjust="spacingAndGlyphs">
               Find Recipes from What’s Already in Your Kitchen.
             </textPath>
