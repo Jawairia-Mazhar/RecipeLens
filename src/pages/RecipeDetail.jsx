@@ -30,7 +30,7 @@ const isFavorite = recipe ? favorites.some((fav) => fav.id === recipe.id) : fals
         recipe && (
             <div className="w-full mx-auto p-4 mt-12 sm:p-6">
 
-              <div className="flex flex-col gap-8 rounded-3xl border border-white/10 p-6 shadow-2xl shadow-slate-900/40 backdrop-blur-md md:flex-row md:items-start">
+              <div className="flex flex-col gap-8 rounded-3xl border border-white/10 p-6 shadow-2xl shadow-[#d3873f]/40 backdrop-blur-md md:flex-row md:items-start">
 
                 <div className="flex flex-1 flex-col gap-4 text-white">
 

@@ -12,7 +12,7 @@ const Navbar = () => {
       'bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm'
     }`}>
       <h1><Link to="/" className={`text-3xl
-          ${isHome ? 'text-white' : 'text-gray-800'}`} style={{ fontFamily: "Pacifico", fontSize: "32px"}}>RecipeLens</Link></h1>
+          ${isHome ? 'text-white' : 'text-[#d3873f]'}`} style={{ fontFamily: "Pacifico", fontSize: "32px"}}>RecipeLens</Link></h1>
       
       <Link to="/favorites">
         <img src={FavoriteIcon} alt="Favorites" className='w-6 h-6 '/>

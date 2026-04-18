@@ -91,11 +91,13 @@ const Home = ({favorites, addToFav, removeFromFav}) => {
             </button>
           ))}
         </div>
-
+        
         <SearchBar onSearch={onSearch} initialValue={searchedText} className="w-full"/>
       </main>
     {loading ? <p>Loading...</p> :  
-      <div className='flex flex-wrap gap-4 w-full justify-center py-8' id = "recipesContainer" ref={recipesRef}> {/* Assign the ref to the container */}
+      <div className='flex flex-wrap gap-4 w-full justify-center py-4' id = "recipesContainer" ref={recipesRef}>
+        <h1 className='w-full text-center text-2xl font-semibold mb-4'>Suggested Recipes</h1>
+         {/* Assign the ref to the container */}
         {recipes.map(recipe => (
           <RecipeCard key={recipe.id} recipe={recipe} addToFav={addToFav} removeFromFav={removeFromFav} favorites={favorites}/> //maps over recipes and renders a RecipeCard for each recipe, passing the recipe data as a prop
         ))}
