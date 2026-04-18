@@ -69,7 +69,7 @@ const Home = ({favorites, addToFav, removeFromFav}) => {
           style={{ filter: 'blur(0px)' }}
         />
 {/* curved text using svg */}
-        <svg viewBox="0 0 900 180" className="w-full max-w-6xl h-60">
+          <svg viewBox="0 0 900 180" className="hidden md:block md:w-full md:max-w-6xl md:h-60">
           <defs>
             <path id="curve" d="M 20 120 Q 450 20 880 120" fill="transparent" />
           </defs>
@@ -80,8 +80,13 @@ const Home = ({favorites, addToFav, removeFromFav}) => {
             </textPath>
           </text>
         </svg>
+        <div className='md:hidden w-full max-w-6xl px-4 flex flex-col items-center gap-4 text-shadow-sm my-12'>
+          <h1 className="block  text-white text-3xl leading-12 font-bold text-center mx-8">
+            Find <span className="text-orange-300 text-4xl line-break">Recipes</span> <br/>from What's Already <br/>in <span className='text-orange-300 text-4xl'>Your Kitchen.</span>
+          </h1>
+        </div>
 {/* suggested search buttons */}
-        <div className='flex flex-wrap gap-2 justify-center'>
+        <div className='flex flex-wrap gap-2 justify-center p-2'>
           {suggestions.map(item => (
             <button 
               key={item}
@@ -92,7 +97,7 @@ const Home = ({favorites, addToFav, removeFromFav}) => {
           ))}
         </div>
         
-        <SearchBar onSearch={onSearch} initialValue={searchedText} className="w-full"/>
+        <SearchBar onSearch={onSearch} initialValue={searchedText} className="md:w-full"/>
       </main>
     {loading ? <p>Loading...</p> :  
       <div className='flex flex-wrap gap-4 w-full justify-center py-4' id = "recipesContainer" ref={recipesRef}>
