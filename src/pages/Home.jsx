@@ -1,7 +1,7 @@
 import React from 'react'
 import SearchBar from '../components/SearchBar'
 import RecipeCard from '../components/RecipeCard'
-import backgroundImage from '../assets/bg-img.png'
+import backgroundImage from '../assets/bg-img.jpg'
 
 const Home = ({favorites, addToFav, removeFromFav}) => {
   const [searchedText, setSearchedText] = React.useState('');
