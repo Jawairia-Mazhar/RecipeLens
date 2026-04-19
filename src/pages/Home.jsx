@@ -11,8 +11,8 @@ const Home = ({favorites, addToFav, removeFromFav}) => {
   const [shouldFetch, setShouldFetch] = React.useState(false);
 
   React.useEffect(() => {
-    const storedText = localStorage.getItem('lastSearchText');
-    const storedRecipes = localStorage.getItem('lastResults');
+    const storedText = sessionStorage.getItem('lastSearchText');
+    const storedRecipes = sessionStorage.getItem('lastResults');
 
     if (storedText && storedRecipes) {
       setSearchedText(storedText);
@@ -28,8 +28,8 @@ const Home = ({favorites, addToFav, removeFromFav}) => {
       .then(data => {
         if (Array.isArray(data)) {
           setRecipes(data);
-          localStorage.setItem('lastResults', JSON.stringify(data));
-          localStorage.setItem('lastSearchText', searchedText);
+          sessionStorage.setItem('lastResults', JSON.stringify(data));
+          sessionStorage.setItem('lastSearchText', searchedText);
           setError(null);
         } else {
           setRecipes([]);
