@@ -7,7 +7,7 @@ const Navbar = () => {
   const isHome = location.pathname === '/' // Check if the current path is the home page
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-20 flex items-center justify-between w-full px-4 py-3 
+    <nav className={`fixed top-0 left-0 right-0 z-10 flex items-center justify-between w-full px-4 py-3 
       ${isHome ? 'bg-transparent shadow-none' : 
       'bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm'
     }`}>
