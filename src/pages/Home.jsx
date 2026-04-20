@@ -14,8 +14,7 @@ const Home = ({favorites, addToFav, removeFromFav}) => {
     const storedText = sessionStorage.getItem('lastSearchText');
     const storedRecipes = sessionStorage.getItem('lastResults');
 
-    if (storedText && storedRecipes) {
-      setSearchedText(storedText);
+    if (storedRecipes) {
       setRecipes(JSON.parse(storedRecipes));
     }
   }, []);
@@ -45,20 +44,23 @@ const Home = ({favorites, addToFav, removeFromFav}) => {
         setShouldFetch(false);
       });
     }, [searchedText, shouldFetch])
-
+    
+    const justSearched = React.useRef(false); // create a ref to track if a search was just performed
     const onSearch = (text) => {
-      setSearchedText(text);
-      setShouldFetch(true);
+    justSearched.current = true; // set the ref to true when a search is performed
+    setSearchedText(text);
+    setShouldFetch(true);
     }
 
     const recipesRef = React.useRef(null); // create a ref to the recipes container
- 
-    React.useEffect(() => {
-      if (recipes.length > 0){
-        recipesRef.current?.scrollIntoView({ behavior: 'smooth' }); // Scroll to the recipes container smoothly when new recipes are loaded
+
+    React.useEffect(() => { // scroll to the recipes container when recipes are updated and a search was just performed
+      if (recipes.length > 0 && justSearched.current) {
+        justSearched.current = false;
+        recipesRef.current?.scrollIntoView({ behavior: 'smooth' });
       }
-    })
-    
+    }, [recipes])
+
     const suggestions = ['Chickpeas', 'Pasta', 'Oats', 'Lentils', 'Eggs', 'Cheese']
 
   return (
