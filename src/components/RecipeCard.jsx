@@ -18,7 +18,8 @@ const RecipeCard = ({ recipe, favorites, addToFav, removeFromFav }) => {
         <div className='relative group item-center'>
           <div className='card__image w-58 h-58 rounded-full overflow-hidden'>
             <img src={recipe.image} alt={recipe.title}
-                className="w-full h-full rounded-full object-cover object-center border-4 border-white shadow-lg"/>
+                className="w-full h-full rounded-full object-cover object-center border-4 border-white shadow-lg"
+                onError={(e) => e.target.style.display = 'none'}/>
           </div>
 {/* shadow div for hover effect on recipe image        */}
           <div className='flex justify-center items-center w-58 h-58 rounded-full absolute inset-0 bg-transparent backdrop-blur-xs bg-opacity-50 opacity-0 group-hover:opacity-90 transition-opacity duration-200'>
@@ -27,7 +28,7 @@ const RecipeCard = ({ recipe, favorites, addToFav, removeFromFav }) => {
                 e.stopPropagation();
                 isFavorite ? removeFromFav(recipe.id) : addToFav(recipe)}}
               className = "absolute w-8 h-8 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex justify-center items-center">
-              <img src={isFavorite ? FilledFav : EmptyFav} alt={isFavorite ? "Remove from Favorites" : "Add to Favorites"} className='w-8 h-8'/>
+              <img src={isFavorite ? FilledFav : EmptyFav} alt={isFavorite ? "Remove from Favorites" : "Add to Favorites"} className={`w-8 h-8 hover:transform-none ${!isFavorite ? 'brightness-0 invert' : ''}`}/>
             </button>
           </div>
         </div>

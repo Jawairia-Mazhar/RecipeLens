@@ -80,8 +80,8 @@ const Home = ({favorites, addToFav, removeFromFav}) => {
             </textPath>
           </text>
         </svg>
-        <div className='md:hidden w-full max-w-6xl px-4 flex flex-col items-center gap-4 text-shadow-sm my-12'>
-          <h1 className="block  text-white text-3xl leading-12 font-bold text-center mx-8">
+        <div className='md:hidden w-full max-w-6xl px-4 flex flex-col items-center gap-4 text-shadow-lg my-12'>
+          <h1 className="block  text-white text-3xl leading-12 font-bold text-center mx-8 ">
             Find <span className="text-orange-300 text-4xl line-break">Recipes</span> <br/>from What's Already <br/>in <span className='text-orange-300 text-4xl'>Your Kitchen.</span>
           </h1>
         </div>

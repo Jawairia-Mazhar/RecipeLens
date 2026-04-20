@@ -34,15 +34,14 @@ const isFavorite = recipe ? favorites.some((fav) => fav.id === recipe.id) : fals
 
             <div className="flex flex-1 flex-col gap-4 text-white">
 
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="md:flex md:flex-col w-full gap-3 items-center justify-between">
 
-                <div>
-                  <h1 className="text-3xl font-bold text-gray-800">{recipe.title}</h1>
-                  <p className="mt-2 text-sm text-slate-300 sm:text-base">
+                <h1 className="text-3xl font-bold text-gray-800 w-full">{recipe.title}</h1>
+                <div className='flex flex-row items-center w-full justify-between'>
+                  <p className="text-sm text-slate-300 sm:text-base">
                     {recipe.readyInMinutes && `${recipe.readyInMinutes} min · `}
                     {recipe.servings && `${recipe.servings} servings`}
                   </p>
-                  </div>
 {/* add to favorite button */}
                 <button
                   onClick={() => isFavorite ? removeFromFav(recipe.id) : addToFav(recipe)}
@@ -55,6 +54,8 @@ const isFavorite = recipe ? favorites.some((fav) => fav.id === recipe.id) : fals
                     className='w-6 h-6'
                   />
                 </button>
+
+                </div>
               </div>
               <div className='flex items-center justify-center'>
                 <img
