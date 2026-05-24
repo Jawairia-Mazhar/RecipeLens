@@ -23,7 +23,9 @@ const RecipeDetail = ({favorites, addToFav, removeFromFav}) => {
         })
     }, [id])
 
-const isFavorite = recipe ? favorites.some((fav) => fav.id === recipe.id) : false // Checking if the recipe has data, If yes then check favorites if the recipe is in favorites, otherwise just return false.      
+const isFavorite = recipe ? favorites.some((fav) => fav.id === recipe.id) : false // Checking if the recipe has data, If yes then check favorites if the recipe is in favorites, otherwise just return false. 
+
+
   return (
     <>
       {loading ? <p>Loading...</p> :  
@@ -78,7 +80,6 @@ const isFavorite = recipe ? favorites.some((fav) => fav.id === recipe.id) : fals
         </div>
         )}
         {error && <p>{error}</p>} {/*  If error is not null, show it. */}
-
     </>
   )
 }

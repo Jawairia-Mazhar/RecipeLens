@@ -28,14 +28,13 @@ const App = () => {
   const removeFromFav = (recipeId) => { // need only id to remove from favorites, not the entire recipe object.
     setFavorites(prevFavs => prevFavs.filter(r => r.id !== recipeId)) // filter out the recipe with the given id from the favorites list. It creates a new array that includes all recipes except the one with the specified id, effectively removing it from the favorites.
   }
-
+ 
   return (
     <>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home  addToFav={addToFav} removeFromFav={removeFromFav} favorites={favorites}/>} />
         <Route path="/recipe/:id" element={ <RecipeDetail favorites={favorites} addToFav={addToFav} removeFromFav={removeFromFav} /> } />
-        <Route path="/recipe/:id" element={ <RecipeCard favorites={favorites} addToFav={addToFav} removeFromFav={removeFromFav}/> } /> {/* This route is added to ensure that when a user clicks on a recipe card, they are navigated to the recipe detail page where they can see more information about the recipe and have the option to add it to their favorites. */}
         <Route path="/favorites" element={<Favorites favorites={favorites} addToFav={addToFav} removeFromFav={removeFromFav}/>} />
 
       </Routes>
