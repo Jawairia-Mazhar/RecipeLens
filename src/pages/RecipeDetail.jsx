@@ -2,6 +2,7 @@ import React from 'react'
 import { useParams } from 'react-router-dom'
 import EmptyFav from '../assets/favorite.png'
 import FilledFav from '../assets/filled_heart.png'
+import RecipeChat from '../components/RecipeChat'
 
 const RecipeDetail = ({favorites, addToFav, removeFromFav}) => {
     const { id } = useParams() //access dynamic parameters from the current URL
@@ -77,6 +78,8 @@ const isFavorite = recipe ? favorites.some((fav) => fav.id === recipe.id) : fals
                 </div>
             </div>
           </div>
+          {recipe && <RecipeChat recipe={recipe} />}
+
         </div>
         )}
         {error && <p>{error}</p>} {/*  If error is not null, show it. */}
