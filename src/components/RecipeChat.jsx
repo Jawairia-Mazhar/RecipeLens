@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { GoogleGenAI } from "@google/genai"
+import send from "../assets/send.png"
 
 const RecipeChat = ({ recipe }) => {
   const [messages, setMessages] = useState([]) // store the msg history -user % Ai
@@ -28,7 +29,7 @@ const RecipeChat = ({ recipe }) => {
       `
 
       const result = await ai.models.generateContent({ // we call the generateContent method on the AI client to get a response based on the prompt we created. We specify the model to use (gemini-3.5-flash) and pass the prompt as the content for the AI to generate a response from. The await keyword is used to wait for the API response before proceeding with the rest of the code.
-        model: "gemini-3.5-flash",
+        model: "gemini-2.5-flash",
         contents: prompt,
       })
 
@@ -44,12 +45,14 @@ const RecipeChat = ({ recipe }) => {
   }
 
   return (
-    <div className="mt-6 rounded-3xl border border-white/10 p-5">
-      <h2 className="text-xl font-bold text-white mb-4">Ask about this recipe</h2>
+    <div 
+    className="w-[40%] flex flex-col h-96 rounded-3xl border border-black/10 p-5 bg-white fixed bottom-16 right-6 z-50 mt-20"
+    id="chat-section">
+      <h2 className="text-xl font-bold text-black mb-4">Ask about this recipe</h2>
 
       <div className="flex flex-col gap-3 mb-4 max-h-64 overflow-y-auto">
         {messages.map((msg, i) => (
-          <div key={i} className={`p-3 rounded-xl text-sm ${msg.role === "user" ? "bg-orange-500/20 text-white self-end" : "bg-white/10 text-gray-200 self-start"}`}>
+          <div key={i} className={`p-2 rounded-xl text-sm ${msg.role === "user" ? "bg-gray-100  text-amber-600  self-end" : "bg-amber-600 text-white self-start"}`}>
             {msg.text}
           </div>
         ))}
@@ -57,16 +60,16 @@ const RecipeChat = ({ recipe }) => {
         {error && <p className="text-red-300 text-sm">{error}</p>}
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex gap-2 mt-auto bg-amber-700/10 rounded-xl">
         <input
-          className="flex-1 rounded-xl border border-white/10 bg-white/10 p-2 text-black placeholder-gray-400"
+          className="flex-1 rounded-xl bg-white/10 p-2 text-black placeholder-gray-400 outline-none "
           placeholder="e.g. Can I replace eggs here?"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && sendMessage()} // allows user to press Enter key to send message instead of clicking the button
         />
-        <button onClick={sendMessage} className="bg-orange-500 text-white px-4 rounded-xl hover:bg-orange-600">
-          Send
+        <button onClick={sendMessage} className="p-2 rounded-4xl">
+          <img src={send} alt="Send" className="w-5 h-5" />
         </button>
       </div>
     </div>
