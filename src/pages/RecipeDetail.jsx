@@ -3,12 +3,14 @@ import { useParams } from 'react-router-dom'
 import EmptyFav from '../assets/favorite.png'
 import FilledFav from '../assets/filled_heart.png'
 import RecipeChat from '../components/RecipeChat'
+import ChatBot from "../assets/chat-bot.png" 
 
 const RecipeDetail = ({favorites, addToFav, removeFromFav}) => {
     const { id } = useParams() //access dynamic parameters from the current URL
     const [recipe, setRecipe] = React.useState(null); // returns a single recipe object, not an array, so we initialize it as null instead of an empty array
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(null);
+    const [showChatBot, setShowChatBot] = React.useState(false); // state to control the visibility of the chatbot interface
 
     React.useEffect(() => {
       setLoading(true);
@@ -24,14 +26,16 @@ const RecipeDetail = ({favorites, addToFav, removeFromFav}) => {
         })
     }, [id])
 
-const isFavorite = recipe ? favorites.some((fav) => fav.id === recipe.id) : false // Checking if the recipe has data, If yes then check favorites if the recipe is in favorites, otherwise just return false. 
-
+  const isFavorite = recipe ? favorites.some((fav) => fav.id === recipe.id) : false // Checking if the recipe has data, If yes then check favorites if the recipe is in favorites, otherwise just return false. 
+    const handleChatBotClick = () => {
+      setShowChatBot(!showChatBot); 
+    };
 
   return (
     <>
       {loading ? <p>Loading...</p> :  
       recipe && (
-        <div className="w-full mx-auto p-4 mt-12 sm:p-6">
+        <div className="relative w-full mx-auto p-4 mt-12 sm:p-6">
 
           <div className="flex flex-col gap-8 rounded-3xl border border-white/10 p-6 shadow-2xl shadow-[#d3873f]/40 backdrop-blur-md md:flex-row md:items-start">
 
@@ -78,13 +82,20 @@ const isFavorite = recipe ? favorites.some((fav) => fav.id === recipe.id) : fals
                 </div>
             </div>
           </div>
-          {recipe && <RecipeChat recipe={recipe} />}
-
+          {/* {recipe && <RecipeChat recipe={recipe} />} */}
+          <button 
+           className="fixed bottom-4 right-4 z-50 cursor-pointer" 
+           onClick={handleChatBotClick}>
+            <img src={ChatBot} alt="ChatBot" className="w-10 h-10" />
+          </button>
+          {showChatBot && <RecipeChat recipe={recipe} />}    
         </div>
+
         )}
+
         {error && <p>{error}</p>} {/*  If error is not null, show it. */}
     </>
-  )
+    )
 }
 
 export default RecipeDetail
