@@ -52,6 +52,7 @@ src/
 │   ├── Navbar.jsx
 │   ├── SearchBar.jsx
 │   └── RecipeCard.jsx
+│   └── RecipeChat.jsx
 ├── pages/
 │   ├── Home.jsx
 │   ├── RecipeDetail.jsx
