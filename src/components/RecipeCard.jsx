@@ -1,43 +1,51 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import EmptyFav from '../assets/favorite.png'
 import FilledFav from '../assets/filled_heart.png'
 
 const RecipeCard = ({ recipe, favorites, addToFav, removeFromFav }) => {
-  const navigate = useNavigate()
-  const isFavorite = recipe ? favorites.some((fav) => fav.id === recipe.id) : false;
+  const isFavorite = favorites.some(fav => fav.id === recipe.id)
+
+  const toggleFavorite = (e) => {
+    e.preventDefault()
+    if (isFavorite) removeFromFav(recipe.id)
+    else addToFav(recipe)
+  }
 
   return (
-    <div className='card cursor-pointer overflow-hidden flex flex-col gap-2 items-center border border-gray-300 rounded-md w-70'>
-      <div className='card__shine' />
-      <div className='card__glow' />
+    <article className="group relative flex flex-col overflow-hidden rounded-2xl bg-white shadow-md transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+      <Link to={`/recipe/${recipe.id}`} className="flex flex-1 flex-col">
+        <div className="aspect-[4/3] overflow-hidden bg-stone-100">
+          <img
+            src={recipe.image}
+            alt={recipe.title}
+            loading="lazy"
+            className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+            onError={(e) => { e.currentTarget.style.display = 'none' }}
+          />
+        </div>
 
-      <div onClick={() => navigate(`/recipe/${recipe.id}`)}
-        className='card__content p-1'>
-{/* image div */}
-        <div className='relative group item-center'>
-          <div className='card__image w-58 h-58 rounded-full overflow-hidden'>
-            <img src={recipe.image} alt={recipe.title}
-                className="w-full h-full rounded-full object-cover object-center border-4 border-white shadow-lg"
-                onError={(e) => e.target.style.display = 'none'}/>
-          </div>
-{/* shadow div for hover effect on recipe image        */}
-          <div className='flex justify-center items-center w-58 h-58 rounded-full absolute inset-0 bg-transparent backdrop-blur-xs bg-opacity-50 opacity-0 group-hover:opacity-90 transition-opacity duration-200'>
-            <button 
-              onClick={(e) => {            
-                e.stopPropagation();
-                isFavorite ? removeFromFav(recipe.id) : addToFav(recipe)}}
-              className = "absolute w-8 h-8 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex justify-center items-center">
-              <img src={isFavorite ? FilledFav : EmptyFav} alt={isFavorite ? "Remove from Favorites" : "Add to Favorites"} className={`w-8 h-8 hover:transform-none ${!isFavorite ? 'brightness-0 invert' : ''}`}/>
-            </button>
-          </div>
-        </div>
-{/* recipe title */}
-        <div className='card__text w-full pb-4 px-1'>
-          <h2 className='card__title text-center line-clamp-2 w-full'>{recipe.title}</h2>
-        </div>
-      </div>
-    </div>
+        <h2
+          className="line-clamp-2 px-5 pb-5 pt-4 text-lg font-semibold leading-snug text-stone-800"
+          style={{ fontFamily: 'Fraunces, serif' }}
+        >
+          {recipe.title}
+        </h2>
+      </Link>
+
+      {/* Always visible so phone users can save without hovering */}
+      <button
+        onClick={toggleFavorite}
+        aria-label={isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
+        className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 shadow backdrop-blur transition hover:scale-110"
+      >
+        <img
+          src={isFavorite ? FilledFav : EmptyFav}
+          alt=""
+          className="h-5 w-5"
+        />
+      </button>
+    </article>
   )
 }
 

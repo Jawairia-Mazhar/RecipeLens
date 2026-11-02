@@ -3,115 +3,157 @@ import SearchBar from '../components/SearchBar'
 import RecipeCard from '../components/RecipeCard'
 import backgroundImage from '../assets/bg-img.jpg'
 
-const Home = ({favorites, addToFav, removeFromFav}) => {
-  const [searchedText, setSearchedText] = React.useState('');
-  const [recipes, setRecipes] = React.useState([]);
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState(null);
-  const [shouldFetch, setShouldFetch] = React.useState(false);
+const SUGGESTIONS = ['Chickpeas', 'Pasta', 'Oats', 'Lentils', 'Eggs', 'Cheese']
 
+const Home = ({ favorites, addToFav, removeFromFav }) => {
+  const [searchedText, setSearchedText] = React.useState('')
+  const [recipes, setRecipes] = React.useState([])
+  const [loading, setLoading] = React.useState(false)
+  const [error, setError] = React.useState(null)
+  const [shouldFetch, setShouldFetch] = React.useState(false)
+
+  const justSearched = React.useRef(false)
+  const recipesRef = React.useRef(null)
+
+  // Restore the last search (text + results) when the page mounts
   React.useEffect(() => {
-    const storedText = sessionStorage.getItem('lastSearchText');
-    const storedRecipes = sessionStorage.getItem('lastResults');
+    const storedText = sessionStorage.getItem('lastSearchText')
+    const storedRecipes = sessionStorage.getItem('lastResults')
 
-    if (storedRecipes) {
-      setRecipes(JSON.parse(storedRecipes));
-    }
-  }, []);
+    if (storedText) setSearchedText(storedText)
+    if (storedRecipes) setRecipes(JSON.parse(storedRecipes))
+  }, [])
 
+  // Fetch recipes when a search is triggered
   React.useEffect(() => {
-    if (!searchedText || !shouldFetch) return;
-    setLoading(true);
+    if (!searchedText || !shouldFetch) return
+    setLoading(true)
+
     fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=${searchedText}&apiKey=ef8cd867a22541cf8424f6b4c4cd361b`)
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) {
-          setRecipes(data);
-          sessionStorage.setItem('lastResults', JSON.stringify(data));
-          sessionStorage.setItem('lastSearchText', searchedText);
-          setError(null);
+          setRecipes(data)
+          sessionStorage.setItem('lastResults', JSON.stringify(data))
+          sessionStorage.setItem('lastSearchText', searchedText)
+          setError(null)
         } else {
-          setRecipes([]);
-          setError(data.message || 'No recipes found.');
+          setRecipes([])
+          setError(data.message || 'No recipes found.')
         }
-        setLoading(false);
-        setShouldFetch(false);
+        setLoading(false)
+        setShouldFetch(false)
       })
-      .catch(err => {
-        setRecipes([]);
-        setError('Something went wrong. Please try again.');
-        setLoading(false);        
-        setShouldFetch(false);
-      });
-    }, [searchedText, shouldFetch])
-    
-    const justSearched = React.useRef(false); // create a ref to track if a search was just performed
-    const onSearch = (text) => {
-    justSearched.current = true; // set the ref to true when a search is performed
-    setSearchedText(text);
-    setShouldFetch(true);
+      .catch(() => {
+        setRecipes([])
+        setError('Something went wrong. Please try again.')
+        setLoading(false)
+        setShouldFetch(false)
+      })
+  }, [searchedText, shouldFetch])
+
+  // Scroll to results after a fresh search
+  React.useEffect(() => {
+    if (recipes.length > 0 && justSearched.current) {
+      justSearched.current = false
+      recipesRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
+  }, [recipes])
 
-    const recipesRef = React.useRef(null); // create a ref to the recipes container
-
-    React.useEffect(() => { // scroll to the recipes container when recipes are updated and a search was just performed
-      if (recipes.length > 0 && justSearched.current) {
-        justSearched.current = false;
-        recipesRef.current?.scrollIntoView({ behavior: 'smooth' });
-      }
-    }, [recipes])
-
-    const suggestions = ['Chickpeas', 'Pasta', 'Oats', 'Lentils', 'Eggs', 'Cheese']
+  const onSearch = (text) => {
+    justSearched.current = true
+    setSearchedText(text)
+    setShouldFetch(true)
+  }
 
   return (
-    <>
-      <main className='w-full min-h-screen relative flex flex-col items-center gap-4 pt-16 bg-transparent'>
-        <img src={backgroundImage} alt="Background"   
-          className='w-full h-full object-cover absolute inset-0 -z-10'
-          style={{ filter: 'blur(0px)' }}
+    <div className="min-h-screen bg-stone-50">
+      {/* Hero */}
+      <section className="relative isolate overflow-hidden">
+        <img
+          src={backgroundImage}
+          alt=""
+          className="absolute inset-0 -z-10 h-full w-full object-cover"
         />
-{/* curved text using svg */}
-          <svg viewBox="0 0 900 180" className="hidden md:block md:w-full md:max-w-6xl md:h-60">
-          <defs>
-            <path id="curve" d="M 20 120 Q 450 20 880 120" fill="transparent" />
-          </defs>
+        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-stone-900/70 via-stone-900/50 to-stone-50" />
 
-          <text fontSize="32" className="fill-white font-bold text-shadow-sm">
-            <textPath href="#curve" startOffset="50%" textAnchor="middle" lengthAdjust="spacingAndGlyphs">
-              Find Recipes from What’s Already in Your Kitchen.
-            </textPath>
-          </text>
-        </svg>
-        <div className='md:hidden w-full max-w-6xl px-4 flex flex-col items-center gap-4 text-shadow-lg my-12'>
-          <h1 className="block  text-white text-3xl leading-12 font-bold text-center mx-8 ">
-            Find <span className="text-orange-300 text-4xl line-break">Recipes</span> <br/>from What's Already <br/>in <span className='text-orange-300 text-4xl'>Your Kitchen.</span>
+        <div className="mx-auto flex max-w-3xl flex-col items-center gap-6 px-6 pb-24 pt-32 text-center">
+          <p className="text-xs font-medium uppercase tracking-[0.3em] text-orange-200">
+            Cook with what you have
+          </p>
+
+          <h1
+            className="text-4xl font-semibold leading-tight text-white sm:text-6xl"
+            style={{ fontFamily: 'Fraunces, serif' }}
+          >
+            Find recipes from what’s already in your{' '}
+            <span className="text-orange-300">kitchen</span>.
           </h1>
+
+          <p className="max-w-xl text-base text-white/80 sm:text-lg">
+            Type a few ingredients and we’ll suggest dishes you can make tonight.
+          </p>
+
+          <div className="w-full max-w-2xl">
+            <SearchBar onSearch={onSearch} initialValue={searchedText} />
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-2">
+            {SUGGESTIONS.map(item => (
+              <button
+                key={item}
+                onClick={() => onSearch(item)}
+                className="rounded-full border border-white/40 bg-white/10 px-4 py-1.5 text-sm text-white backdrop-blur transition hover:bg-white hover:text-stone-900"
+              >
+                {item}
+              </button>
+            ))}
+          </div>
         </div>
-{/* suggested search buttons */}
-        <div className='flex flex-wrap gap-2 justify-center p-2'>
-          {suggestions.map(item => (
-            <button 
-              key={item}
-              onClick={() => onSearch(item)}
-              className='bg-white bg-opacity-80 text-gray-800 px-4 py-1 rounded-full text-sm hover:bg-opacity-100 transition'>
-              {item}
-            </button>
-          ))}
-        </div>
-        
-        <SearchBar onSearch={onSearch} initialValue={searchedText} className="md:w-full"/>
-      </main>
-    {loading ? <p>Loading...</p> :  
-      <div className='flex flex-wrap gap-4 w-full justify-center py-4' id = "recipesContainer" ref={recipesRef}>
-        <h1 className='w-full text-center text-2xl font-semibold mb-4'>Suggested Recipes</h1>
-         {/* Assign the ref to the container */}
-        {recipes.map(recipe => (
-          <RecipeCard key={recipe.id} recipe={recipe} addToFav={addToFav} removeFromFav={removeFromFav} favorites={favorites}/> //maps over recipes and renders a RecipeCard for each recipe, passing the recipe data as a prop
-        ))}
-      </div>
-    }
-      {error && <p>{error}</p>} {/*  If error is not null, show it. */}
-    </>
+      </section>
+
+      {/* Results */}
+      <section
+        ref={recipesRef}
+        id="recipesContainer"
+        className="mx-auto max-w-6xl scroll-mt-20 px-6 py-12"
+      >
+        {(loading || recipes.length > 0) && (
+          <h2
+            className="mb-8 text-center text-3xl font-semibold text-stone-800"
+            style={{ fontFamily: 'Fraunces, serif' }}
+          >
+            {loading ? 'Finding recipes…' : 'Suggested recipes'}
+          </h2>
+        )}
+
+        {loading && (
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="h-72 animate-pulse rounded-2xl bg-stone-200" />
+            ))}
+          </div>
+        )}
+
+        {!loading && error && (
+          <p className="text-center text-stone-600">{error}</p>
+        )}
+
+        {!loading && recipes.length > 0 && (
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {recipes.map(recipe => (
+              <RecipeCard
+                key={recipe.id}
+                recipe={recipe}
+                addToFav={addToFav}
+                removeFromFav={removeFromFav}
+                favorites={favorites}
+              />
+            ))}
+          </div>
+        )}
+      </section>
+    </div>
   )
 }
 
