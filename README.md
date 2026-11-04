@@ -2,7 +2,9 @@
 Find recipes from what's already in your kitchen.
 
 📸 Screenshots:
-<img width="1904" height="912" alt="image" src="https://github.com/user-attachments/assets/1020c06b-0e35-4f13-a4fb-28afb612863c" />
+<img width="1515" height="732" alt="image" src="https://github.com/user-attachments/assets/6db595c8-c776-48c9-b4e1-f95cb0c5f98e" />
+<img width="1528" height="731" alt="image" src="https://github.com/user-attachments/assets/432de38f-bb33-4996-b578-b2b102ac84a5" />
+<img width="1525" height="730" alt="image" src="https://github.com/user-attachments/assets/39d215c6-0757-40a3-ac5b-2d87e229c93d" />
 
 🔍 About
 RecipeLens is a recipe discovery web app that lets users search for recipes based on ingredients they already have at home. Built with React.js and powered by the Spoonacular API.
