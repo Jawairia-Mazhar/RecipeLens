@@ -44,6 +44,9 @@ jsfetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=${sea
 
 ⚠️ The free tier allows 150 requests/day. Use mock data during heavy styling sessions to conserve your quota.
 
+Chat API Setup
+The recipe chat uses a Netlify Function so the Gemini API key is not exposed in the browser. In your Netlify site settings, add `GEMINI_API_KEY` as an environment variable with access to Functions, then redeploy the site. Do not use a `VITE_` prefix for this secret.
+
 
 📁 Project Structure
 src/

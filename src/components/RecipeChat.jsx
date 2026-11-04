@@ -1,43 +1,42 @@
 import React, { useState } from 'react'
-import { GoogleGenAI } from "@google/genai"
-import send from "../assets/send.png"
+import send from '../assets/send.png'
 
 const RecipeChat = ({ recipe }) => {
-  const [messages, setMessages] = useState([]) // store the msg history -user % Ai
-  const [input, setInput] = useState('') // store current user input
-  const [loading, setLoading] = useState(false) // handles the loading state while Ai responds
-  const [error, setError] = useState('') // store any error msgs may occur during the API call
+  const [messages, setMessages] = useState([])
+  const [input, setInput] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
-  const sendMessage = async () => { // main function to send user message and get AI response
-    //async because API call requires waiting for response, so the other code can continue running without blocking the UI.
-    if (!input.trim()) return // prevent sending empty messages, trim removes whitespaces
+  const sendMessage = async () => {
+    const question = input.trim()
+    if (!question || loading) return
 
-    const userMsg = { role: "user", text: input } // create a message object for the user's input, role helps to differentiate between user and AI messages in the chat history
-    setMessages(prev => [...prev, userMsg]) // add user msgs to chat history
-    setInput('') // clear the input field after sending the message
-    setLoading(true) // set loading state to true while waiting for AI response
-    setError('') // clear any previous errors before making a new API call
+    setMessages(prev => [...prev, { role: 'user', text: question }])
+    setInput('')
+    setLoading(true)
+    setError('')
 
-    try { // make API call to Google Gemini AI to get a response, try catch block is used to handle any potential errors that may occur during the API call
-      const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY }) // create an instance of the GoogleGenAI client using the API key stored in environment variables for security reasons, so the key is not exposed in the codebase. This allows us to authenticate our requests to the Gemini API and access its features.
-
-      const prompt = ` //todo Ai will follow this format to answer user questions about the recipe:
-        You are a helpful cooking assistant.
-        The user is viewing this recipe: "${recipe.title}".
-        Ingredients: ${recipe.extendedIngredients?.map(i => i.name).join(", ")}
-        Answer this question briefly: ${input}
-      `
-
-      const result = await ai.models.generateContent({ // we call the generateContent method on the AI client to get a response based on the prompt we created. We specify the model to use (gemini-3.5-flash) and pass the prompt as the content for the AI to generate a response from. The await keyword is used to wait for the API response before proceeding with the rest of the code.
-        model: "gemini-2.5-flash",
-        contents: prompt,
+    try {
+      const response = await fetch('/.netlify/functions/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          question,
+          recipe: {
+            title: recipe.title,
+            ingredients: recipe.extendedIngredients?.map(ingredient => ingredient.name) ?? [],
+          },
+        }),
       })
 
-      const aiMsg = { role: "ai", text: result.text } // create a message object for the AI's response, we can then add this to our chat history so it appears in the UI as a response to the user's question.
-      setMessages(prev => [...prev, aiMsg])
+      const result = await response.json()
+      if (!response.ok) {
+        throw new Error(result.error || 'The chat service could not respond. Please try again.')
+      }
 
+      setMessages(prev => [...prev, { role: 'ai', text: result.answer }])
     } catch (err) {
-      setError('Something went wrong. Try again!')
+      setError(err instanceof Error ? err.message : 'The chat service could not respond. Please try again.')
       console.error(err)
     } finally {
       setLoading(false)
@@ -45,30 +44,31 @@ const RecipeChat = ({ recipe }) => {
   }
 
   return (
-    <div 
-    className="w-[40%] flex flex-col h-96 rounded-3xl border border-black/10 p-5 bg-white fixed bottom-16 right-6 z-50 mt-20"
-    id="chat-section">
+    <div
+      className="w-[40%] flex flex-col h-96 rounded-3xl border border-black/10 p-5 bg-white fixed bottom-16 right-6 z-50 mt-20"
+      id="chat-section"
+    >
       <h2 className="text-xl font-bold text-black mb-4">Ask about this recipe</h2>
 
       <div className="flex flex-col gap-3 mb-4 max-h-64 overflow-y-auto">
         {messages.map((msg, i) => (
-          <div key={i} className={`p-2 rounded-xl text-sm ${msg.role === "user" ? "bg-gray-100  text-amber-600  self-end" : "bg-amber-600 text-white self-start"}`}>
+          <div key={i} className={`p-2 rounded-xl text-sm ${msg.role === 'user' ? 'bg-gray-100 text-amber-600 self-end' : 'bg-amber-600 text-white self-start'}`}>
             {msg.text}
           </div>
         ))}
         {loading && <p className="text-gray-400 text-sm">Thinking...</p>}
-        {error && <p className="text-red-300 text-sm">{error}</p>}
+        {error && <p className="text-red-500 text-sm">{error}</p>}
       </div>
 
       <div className="flex gap-2 mt-auto bg-amber-700/10 rounded-xl">
         <input
-          className="flex-1 rounded-xl bg-white/10 p-2 text-black placeholder-gray-400 outline-none "
+          className="flex-1 rounded-xl bg-white/10 p-2 text-black placeholder-gray-400 outline-none"
           placeholder="e.g. Can I replace eggs here?"
           value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && sendMessage()} // allows user to press Enter key to send message instead of clicking the button
+          onChange={e => setInput(e.target.value)}
+          onKeyDown={e => e.key === 'Enter' && sendMessage()}
         />
-        <button onClick={sendMessage} className="p-2 rounded-4xl">
+        <button onClick={sendMessage} disabled={loading} className="p-2 rounded-4xl disabled:opacity-50">
           <img src={send} alt="Send" className="w-5 h-5" />
         </button>
       </div>
