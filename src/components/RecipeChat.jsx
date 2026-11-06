@@ -43,37 +43,55 @@ const RecipeChat = ({ recipe }) => {
     }
   }
 
-  return (
-    <div
-      className="w-[40%] flex flex-col h-96 rounded-3xl border border-black/10 p-5 bg-white fixed bottom-16 right-6 z-50 mt-20"
-      id="chat-section"
-    >
-      <h2 className="text-xl font-bold text-black mb-4">Ask about this recipe</h2>
+return (
+  <div
+    id="chat-section"
+    className="
+      fixed z-50 flex flex-col bg-white border border-black/10 shadow-xl
+      inset-x-3 bottom-20 h-[70vh] rounded-3xl p-4
+      sm:inset-x-auto sm:right-6 sm:bottom-16 sm:w-[min(90vw,24rem)] sm:h-36 sm:p-5
+      lg:w-[40%] lg:max-w-md
+    "
+  >
+    <h2 className="text-lg sm:text-xl font-bold text-black mb-3">
+      Ask about this recipe
+    </h2>
 
-      <div className="flex flex-col gap-3 mb-4 max-h-64 overflow-y-auto">
-        {messages.map((msg, i) => (
-          <div key={i} className={`p-2 rounded-xl text-sm ${msg.role === 'user' ? 'bg-gray-100 text-amber-600 self-end' : 'bg-amber-600 text-white self-start'}`}>
-            {msg.text}
-          </div>
-        ))}
-        {loading && <p className="text-gray-400 text-sm">Thinking...</p>}
-        {error && <p className="text-red-500 text-sm">{error}</p>}
-      </div>
-
-      <div className="flex gap-2 mt-auto bg-amber-700/10 rounded-xl">
-        <input
-          className="flex-1 rounded-xl bg-white/10 p-2 text-black placeholder-gray-400 outline-none"
-          placeholder="e.g. Can I replace eggs here?"
-          value={input}
-          onChange={e => setInput(e.target.value)}
-          onKeyDown={e => e.key === 'Enter' && sendMessage()}
-        />
-        <button onClick={sendMessage} disabled={loading} className="p-2 rounded-4xl disabled:opacity-50">
-          <img src={send} alt="Send" className="w-5 h-5" />
-        </button>
-      </div>
+    <div className="flex flex-col gap-3 mb-4 flex-1 min-h-0 overflow-y-auto pr-1">
+      {messages.map((msg, i) => (
+        <div
+          key={i}
+          className={`max-w-[85%] px-3 py-2 rounded-xl text-sm break-words ${
+            msg.role === "user"
+              ? "bg-gray-100 text-amber-600 self-end"
+              : "bg-amber-600 text-white self-start"
+          }`}
+        >
+          {msg.text}
+        </div>
+      ))}
+      {loading && <p className="text-gray-400 text-sm">Thinking...</p>}
+      {error && <p className="text-red-500 text-sm">{error}</p>}
     </div>
-  )
-}
 
+    <div className="flex items-center gap-2 mt-auto bg-amber-700/10 rounded-xl p-1">
+      <input
+        className="flex-1 min-w-0 rounded-xl bg-white/10 px-3 py-2 text-base sm:text-sm text-black placeholder-gray-400 outline-none"
+        placeholder="e.g. Can I replace eggs here?"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+      />
+      <button
+        onClick={sendMessage}
+        disabled={loading}
+        aria-label="Send message"
+        className="shrink-0 p-2 rounded-full hover:bg-amber-700/10 transition disabled:opacity-50"
+      >
+        <img src={send} alt="" className="w-5 h-5" />
+      </button>
+    </div>
+  </div>
+);
+}
 export default RecipeChat
