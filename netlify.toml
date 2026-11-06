@@ -1,2 +1,7 @@
 [functions]
   directory = "netlify/functions"
+  external_node_modules = ["@google/genai"]
+  node_bundler = "esbuild"
+
+[build.environment]
+  NODE_VERSION = "20"
